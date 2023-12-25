@@ -1,0 +1,16 @@
+# battle.kv
+
+<BoxLayout>:
+    orientation: 'vertical'
+    spacing: 10
+    Label:
+        text: 'Welcome to the Battle App!'
+    TextInput:
+        id: player1_input
+        hint_text: 'Input character name for player 1'
+    TextInput:
+        id: player2_input
+        hint_text: 'Input character name for player 2'
+    Button:
+        text: 'Start Battle'
+        on_press: app.start_battle(self)
