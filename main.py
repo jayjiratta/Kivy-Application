@@ -61,15 +61,6 @@ Winter = Char('Winter', 'armamenter', 100, 100)
 Giselle = Char('Giselle', 'xenoglossy', 100, 100)
 Ningning = Char('Ningning', 'xenoglossy', 100, 100)
 
-
-# main.py
-
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.label import Label
-from kivy.uix.image import Image
-
 class BattleApp(App):
     def build(self):
         self.title = 'Welcome to my Game'
