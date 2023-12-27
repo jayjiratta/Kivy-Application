@@ -62,23 +62,74 @@ Giselle = Char('Giselle', 'xenoglossy', 100, 100)
 Ningning = Char('Ningning', 'xenoglossy', 100, 100)
 
 
+# main.py
+
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.image import Image
+
 class BattleApp(App):
     def build(self):
-        self.title = 'Battle App'
+        self.title = 'Welcome to my Game'
         self.layout = BoxLayout(orientation='vertical', spacing=10)
 
-        # Create widgets
-        self.label = Label(text='Welcome to the Battle App!')
-        self.player1_input = TextInput(hint_text='Input character name for player 1')
-        self.player2_input = TextInput(hint_text='Input character name for player 2')
-        self.start_button = Button(text='Start Battle', on_press=self.start_battle)
+        # Header Label
+        self.header_label = Label(text='Welcome to my Game', font_size=24)
+        self.layout.add_widget(self.header_label)
+
+        # Character Selection Section
+        self.character_images = {
+            'Karina': 'karina_image.png',  # Replace with actual file paths
+            'Winter': 'winter_image.png',
+            'Giselle': 'giselle_image.png',
+            'Ningning': 'ningning_image.png'
+        }
+
+        self.character_buttons = []
+        for char_name, char_image in self.character_images.items():
+            button = Button(text=char_name, on_press=self.select_character)
+            self.character_buttons.append(button)
+            self.layout.add_widget(button)
+
+        # Selected Characters Display
+        self.selected_character_labels = [
+            Label(text='Player 1: None'),
+            Label(text='Player 2: None')
+        ]
+
+        for label in self.selected_character_labels:
+            self.layout.add_widget(label)
+
+        # Start Battle Button
+        self.start_battle_button = Button(text='Start Battle', on_press=self.start_battle, disabled=True)
+        self.layout.add_widget(self.start_battle_button)
 
         return self.layout
 
+    def select_character(self, instance):
+        # Find the index of the clicked button
+        button_index = self.character_buttons.index(instance)
+
+        # Determine the player based on the index
+        player = 'Player 1' if button_index % 2 == 0 else 'Player 2'
+
+        # Extract the character name from the button text
+        character_name = instance.text
+
+        # Update the corresponding label
+        self.selected_character_labels[button_index % 2].text = f'{player}: {character_name}'
+
+        # Enable the "Start Battle" button if both players have selected characters
+        if all(label.text != f'{player}: None' for player, label in zip(['Player 1', 'Player 2'], self.selected_character_labels)):
+            self.start_battle_button.disabled = False
+
     def start_battle(self, instance):
-        player1_name = self.player1_input.text
-        player2_name = self.player2_input.text
+        # Implement the logic for starting the battle
+        pass
 
 # Run the app
 if __name__ == '__main__':
     BattleApp().run()
+
