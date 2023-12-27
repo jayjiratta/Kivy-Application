@@ -1,16 +1,36 @@
-# battle.kv
+# # battle.kv
 
-<BoxLayout>:
-    orientation: 'vertical'
-    spacing: 10
-    Label:
-        text: 'Welcome to the Battle App!'
-    TextInput:
-        id: player1_input
-        hint_text: 'Input character name for player 1'
-    TextInput:
-        id: player2_input
-        hint_text: 'Input character name for player 2'
-    Button:
-        text: 'Start Battle'
-        on_press: app.start_battle(self)
+# <BattleLayout>:
+#     orientation: 'vertical'
+#     spacing: 10
+
+#     Label:
+#         text: 'Welcome to my Game'
+#         font_size: 24
+
+#     BoxLayout:
+#         orientation: 'horizontal'
+#         spacing: 10
+
+#         Button:
+#             text: 'Karina'
+#             on_press: root.select_character(self)
+#         Button:
+#             text: 'Winter'
+#             on_press: root.select_character(self)
+#         Button:
+#             text: 'Giselle'
+#             on_press: root.select_character(self)
+#         Button:
+#             text: 'Ningning'
+#             on_press: root.select_character(self)
+
+#     Label:
+#         text: 'Player 1: None'
+#     Label:
+#         text: 'Player 2: None'
+
+#     Button:
+#         text: 'Start Battle'
+#         on_press: root.start_battle(self)
+#         disabled: True
