@@ -5,6 +5,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
+from kivy.uix.image import Image
+from kivy.uix.screenmanager import ScreenManager, Screen
+import random
 
 class Char:
     def __init__(self, name, char_type, mana, hp):
@@ -60,60 +63,45 @@ Winter = Char('Winter', 'armamenter', 100, 100)
 Giselle = Char('Giselle', 'xenoglossy', 100, 100)
 Ningning = Char('Ningning', 'xenoglossy', 100, 100)
 
-
-class BattleApp(App):
+class MainApp(App):
     def build(self):
-        return BattleLayout()
 
-class BattleLayout(BoxLayout):
-    def __init__(self, **kwargs):
-        super(BattleLayout, self).__init__(orientation='vertical', spacing=10, **kwargs)
+        # Create screens
+        screen_manager = ScreenManager()
 
-        self.header_label = Label(text='Welcome to my Game', font_size=24)
-        self.add_widget(self.header_label)
+        # Welcome Screen
+        welcome_screen = Screen(name="welcome")
+        welcome_layout = BoxLayout(orientation='vertical')
+        welcome_label = Label(text="Welcome to MYs world!!!")
+        start_button = Button(text="Start Game")
+        welcome_layout.add_widget(welcome_label)
+        welcome_layout.add_widget(start_button)
+        welcome_screen.add_widget(welcome_layout)
+        screen_manager.add_widget(welcome_screen)
 
-        self.character_images = {
-            'Karina': 'karina_image.png',
-            'Winter': 'winter_image.png',
-            'Giselle': 'giselle_image.png',
-            'Ningning': 'ningning_image.png'
-        }
+        player1_label = Label(text="Karina")
+        player1_image = Image(source="./image/Karina.jpg") 
+        player2_label = Label(text="Winter")
+        player2_image = Image(source="./image/Winter.jpg")
+        player3_label = Label(text="Giselle")
+        player3_image = Image(source="./image/Giselle.jpg") 
+        player4_label = Label(text="Ningning")
+        player4_image = Image(source="./image/Ningning.jpg") 
+        
+        welcome_layout.add_widget(player1_label)
+        welcome_layout.add_widget(player1_image)
+        welcome_layout.add_widget(player2_label)
+        welcome_layout.add_widget(player2_image)
+        welcome_layout.add_widget(player3_label)
+        welcome_layout.add_widget(player3_image)
+        welcome_layout.add_widget(player4_label)
+        welcome_layout.add_widget(player4_image)
 
-        self.character_buttons = []
-        for char_name, char_image in self.character_images.items():
-            button = Button(text=char_name, on_press=self.select_character)
-            self.character_buttons.append(button)
-            self.add_widget(button)
-
-        self.selected_character_labels = [
-            Label(text='Player 1: None'),
-            Label(text='Player 2: None')
-        ]
-
-        for label in self.selected_character_labels:
-            self.add_widget(label)
-
-        self.start_battle_button = Button(text='Start Battle', on_press=self.start_battle, disabled=True)
-        self.add_widget(self.start_battle_button)
-
-    def select_character(self, instance):
-
-        button_index = self.character_buttons.index(instance)
-
-        player = 'Player 1' if button_index % 2 == 0 else 'Player 2'
-
-        character_name = instance.text
-
-        self.selected_character_labels[button_index % 2].text = f'{player}: {character_name}'
-
-        if all(label.text != f'{player}: None' for player, label in zip(['Player 1', 'Player 2'], self.selected_character_labels)):
-            self.start_battle_button.disabled = False
-
-    def start_battle(self, instance):
-        pass
-    
-
+        return screen_manager
 
 if __name__ == '__main__':
-    BattleApp().run()
+    MainApp().run()
+
+
+
 
