@@ -121,14 +121,38 @@ class CharacterSelectionScreen(Screen):
     def __init__(self, **kwargs):
         super(CharacterSelectionScreen, self).__init__(**kwargs)
         self.layout = BoxLayout(orientation='vertical')
-        start_button = Button(text="Start")
+        start_button = Button(text="Start", on_press=self.start_game)
         self.layout.add_widget(start_button)
 
         self.add_widget(self.layout)
 
-# class GameScreen(Screen):
+    def start_game(self, instance):
+        # Change the screen to game
+        self.manager.current = "game"
 
-# class ResultScreen(Screen):
+
+class GameScreen(Screen):
+    def __init__(self, **kwargs):
+        super(GameScreen, self).__init__(**kwargs)
+        self.layout = BoxLayout(orientation='vertical')
+        end_button = Button(text="End", on_press=self.end_game)
+        self.layout.add_widget(end_button)
+
+        self.add_widget(self.layout)
+
+    def end_game(self, instance):
+        # Change the screen to result
+        self.manager.current = "result"
+
+
+class ResultScreen(Screen):
+    def __init__(self, **kwargs):
+        super(ResultScreen, self).__init__(**kwargs)
+        self.layout = BoxLayout(orientation='vertical')
+        intro_label = Label(text="real end")
+        self.layout.add_widget(intro_label)
+
+        self.add_widget(self.layout)
 
 class MainApp(App):
     def build(self):
@@ -139,6 +163,12 @@ class MainApp(App):
 
         character_selection_screen = CharacterSelectionScreen(name="character_selection")
         screen_manager.add_widget(character_selection_screen)
+
+        game_screen = GameScreen(name="game")
+        screen_manager.add_widget(game_screen)
+
+        result_screen = ResultScreen(name="result")
+        screen_manager.add_widget(result_screen)
 
         return screen_manager
 
