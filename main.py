@@ -64,22 +64,10 @@ Giselle = Char('Giselle', 'xenoglossy', 100, 100)
 Ningning = Char('Ningning', 'xenoglossy', 100, 100)
 
 class Intro(Screen):
-
-class CharacterSelectionScreen(Screen):
-
-class GameScreen(Screen):
-
-class ResultScreen(Screen):
-
-class MainApp(App):
-    def build(self):
-        # Create screens
-        screen_manager = ScreenManager()
-
-        # Welcome Screen
-        welcome_screen = Screen(name="welcome")
-        welcome_layout = BoxLayout(orientation='vertical')
-        welcome_label = Label(text="Welcome to MYs world!!!")
+    def __init__(self, **kwargs):
+        super(Intro, self).__init__(**kwargs)
+        self.layout = BoxLayout(orientation='vertical')
+        intro_label = Label(text="Welcome to MYs world!!!")
         
         # Char details layout
         char_detail_layout = BoxLayout(orientation='horizontal')
@@ -116,14 +104,23 @@ class MainApp(App):
         player4_layout.add_widget(player4_label)
         char_detail_layout.add_widget(player4_layout)
         
-        welcome_layout.add_widget(welcome_label)
-        welcome_layout.add_widget(char_detail_layout)
-        
-        start_button = Button(text="Start Game")
-        welcome_layout.add_widget(start_button)
+        self.layout.add_widget(intro_label)
+        self.layout.add_widget(char_detail_layout)
 
-        welcome_screen.add_widget(welcome_layout)
-        screen_manager.add_widget(welcome_screen)
+        self.add_widget(self.layout)
+        
+# class CharacterSelectionScreen(Screen):
+
+# class GameScreen(Screen):
+
+# class ResultScreen(Screen):
+
+class MainApp(App):
+    def build(self):
+        screen_manager = ScreenManager()
+
+        intro_screen = Intro(name="intro")
+        screen_manager.add_widget(intro_screen)
 
         return screen_manager
 
