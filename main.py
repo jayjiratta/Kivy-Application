@@ -63,6 +63,14 @@ Winter = Char('Winter', 'armamenter', 100, 100)
 Giselle = Char('Giselle', 'xenoglossy', 100, 100)
 Ningning = Char('Ningning', 'xenoglossy', 100, 100)
 
+class Intro(Screen):
+
+class CharacterSelectionScreen(Screen):
+
+class GameScreen(Screen):
+
+class ResultScreen(Screen):
+
 class MainApp(App):
     def build(self):
         # Create screens
