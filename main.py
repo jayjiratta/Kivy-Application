@@ -107,9 +107,24 @@ class Intro(Screen):
         self.layout.add_widget(intro_label)
         self.layout.add_widget(char_detail_layout)
 
+        # Button to start the game
+        start_button = Button(text="Start Game", on_press=self.start_game)
+        self.layout.add_widget(start_button)
+
         self.add_widget(self.layout)
-        
-# class CharacterSelectionScreen(Screen):
+    
+    def start_game(self, instance):
+        # Change the screen to character_selection
+        self.manager.current = "character_selection"
+
+class CharacterSelectionScreen(Screen):
+    def __init__(self, **kwargs):
+        super(CharacterSelectionScreen, self).__init__(**kwargs)
+        self.layout = BoxLayout(orientation='vertical')
+        start_button = Button(text="Start")
+        self.layout.add_widget(start_button)
+
+        self.add_widget(self.layout)
 
 # class GameScreen(Screen):
 
@@ -121,6 +136,9 @@ class MainApp(App):
 
         intro_screen = Intro(name="intro")
         screen_manager.add_widget(intro_screen)
+
+        character_selection_screen = CharacterSelectionScreen(name="character_selection")
+        screen_manager.add_widget(character_selection_screen)
 
         return screen_manager
 
