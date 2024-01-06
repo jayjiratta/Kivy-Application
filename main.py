@@ -121,15 +121,39 @@ class CharacterSelectionScreen(Screen):
     def __init__(self, **kwargs):
         super(CharacterSelectionScreen, self).__init__(**kwargs)
         self.layout = BoxLayout(orientation='vertical')
-        start_button = Button(text="Start", on_press=self.start_game)
+        self.selected_char_label = Label(text="Select Your Character", font_size=20)
+
+        # Add character images and labels
+        for char_name in ['Karina', 'Winter', 'Giselle', 'Ningning']:
+            char_button = Button(text=char_name, on_press=lambda x, char_name=char_name: self.select_character(char_name))
+            self.layout.add_widget(char_button)
+
+        # Button to start the game
+        start_button = Button(text="Start Game", on_press=self.start_game)
+        self.layout.add_widget(self.selected_char_label)
         self.layout.add_widget(start_button)
 
         self.add_widget(self.layout)
 
-    def start_game(self, instance):
-        # Change the screen to game
-        self.manager.current = "game"
+        self.player1_char = None
+        self.player2_char = None
 
+    def select_character(self, char_name):
+        # Assign characters to players
+        if self.player1_char is None:
+            self.player1_char = Char(char_name, 'Type', 100, 100)
+            self.selected_char_label.text = f"Player 1 selected: {char_name}"
+        elif self.player2_char is None:
+            self.player2_char = Char(char_name, 'Type', 100, 100)
+            self.selected_char_label.text = f"Player 2 selected: {char_name}"
+
+    def start_game(self, instance):
+        if self.player1_char is not None and self.player2_char is not None:
+            # Switch to the game screen
+            self.manager.get_screen("game").set_players(self.player1_char, self.player2_char)
+            self.manager.current = "game"
+        else:
+            self.selected_char_label.text = "Both players must select a character."
 
 class GameScreen(Screen):
     def __init__(self, **kwargs):
