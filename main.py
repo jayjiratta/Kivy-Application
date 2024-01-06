@@ -173,9 +173,14 @@ class GameScreen(Screen):
         self.add_widget(self.layout)
 
     def set_players(self, player1, player2):
-        pass
+        self.player1 = player1
+        self.player2 = player2
+        self.current_player = random.choice([player1, player2])
+        self.update_player_label()
+
     def update_player_label(self):
-        pass
+        self.player_label.text = f"{self.current_player.name}'s Turn\nHealth: {self.current_player.hp}"
+        
     def attack(self, instance):
         pass
     
