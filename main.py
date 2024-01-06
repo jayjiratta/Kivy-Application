@@ -38,6 +38,8 @@ class Char:
 
         for skill, damage, mana in characters[self.name]:
             print(f"{skill} damage {damage} mana {mana}")
+        
+        return characters[self.name]
 
     def attack(self, target, skill_number):
         skills = {
@@ -49,7 +51,7 @@ class Char:
 
         if 1 <= skill_number <= 3:
             damage = skills[self.name][skill_number - 1]
-            mana_cost = Char[self.name][skill_number - 1][2]
+            mana_cost = self.skill_with_damage_and_mana()[skill_number - 1][2]
 
             if self.mana >= mana_cost:
                 target.hp -= damage
@@ -69,10 +71,8 @@ class Intro(Screen):
         self.layout = BoxLayout(orientation='vertical')
         intro_label = Label(text="Welcome to MYs world!!!")
         
-        # Char details layout
         char_detail_layout = BoxLayout(orientation='horizontal')
         
-        # Player 1
         player1_label = Label(text="Karina")
         player1_image = Image(source="./image/Karina.jpg")
         player1_layout = BoxLayout(orientation='vertical')
@@ -80,7 +80,6 @@ class Intro(Screen):
         player1_layout.add_widget(player1_label)
         char_detail_layout.add_widget(player1_layout)
         
-        # Player 2
         player2_label = Label(text="Winter")
         player2_image = Image(source="./image/Winter.jpg")
         player2_layout = BoxLayout(orientation='vertical')
@@ -88,7 +87,6 @@ class Intro(Screen):
         player2_layout.add_widget(player2_label)
         char_detail_layout.add_widget(player2_layout)
         
-        # Player 3
         player3_label = Label(text="Giselle")
         player3_image = Image(source="./image/Giselle.jpg")
         player3_layout = BoxLayout(orientation='vertical')
@@ -96,7 +94,6 @@ class Intro(Screen):
         player3_layout.add_widget(player3_label)
         char_detail_layout.add_widget(player3_layout)
         
-        # Player 4
         player4_label = Label(text="Ningning")
         player4_image = Image(source="./image/Ningning.jpg")
         player4_layout = BoxLayout(orientation='vertical')
@@ -107,39 +104,38 @@ class Intro(Screen):
         self.layout.add_widget(intro_label)
         self.layout.add_widget(char_detail_layout)
 
-        # Button to start the game
         start_button = Button(text="Start Game", on_press=self.start_game)
         self.layout.add_widget(start_button)
 
         self.add_widget(self.layout)
     
     def start_game(self, instance):
-        # Change the screen to character_selection
         self.manager.current = "character_selection"
 
 class CharacterSelectionScreen(Screen):
     def __init__(self, **kwargs):
         super(CharacterSelectionScreen, self).__init__(**kwargs)
-        self.layout = BoxLayout(orientation='vertical')
+        self.layout1 = BoxLayout(orientation='vertical')
+        # self.layout2 = BoxLayout(orientation='horizontal')
         self.selected_char_label = Label(text="Select Your Character", font_size=20)
 
-        # Add character images and labels
+        char_select = Label(text="CharacterSelectionScreen")
+        self.layout1.add_widget(char_select)
+
         for char_name in ['Karina', 'Winter', 'Giselle', 'Ningning']:
             char_button = Button(text=char_name, on_press=lambda x, char_name=char_name: self.select_character(char_name))
-            self.layout.add_widget(char_button)
+            self.layout1.add_widget(char_button)
 
-        # Button to start the game
         start_button = Button(text="Start Game", on_press=self.start_game)
-        self.layout.add_widget(self.selected_char_label)
-        self.layout.add_widget(start_button)
+        self.layout1.add_widget(self.selected_char_label)
+        self.layout1.add_widget(start_button)
 
-        self.add_widget(self.layout)
+        self.add_widget(self.layout1)
 
         self.player1_char = None
         self.player2_char = None
 
     def select_character(self, char_name):
-        # Assign characters to players
         if self.player1_char is None:
             self.player1_char = Char(char_name, 'Type', 100, 100)
             self.selected_char_label.text = f"Player 1 selected: {char_name}"
@@ -149,7 +145,6 @@ class CharacterSelectionScreen(Screen):
 
     def start_game(self, instance):
         if self.player1_char is not None and self.player2_char is not None:
-            # Switch to the game screen
             self.manager.get_screen("game").set_players(self.player1_char, self.player2_char)
             self.manager.current = "game"
         else:
@@ -158,17 +153,32 @@ class CharacterSelectionScreen(Screen):
 class GameScreen(Screen):
     def __init__(self, **kwargs):
         super(GameScreen, self).__init__(**kwargs)
+        self.player1 = None
+        self.player2 = None
+
+        self.attack_levels = [1, 2, 3]
+        self.current_player = None
+
         self.layout = BoxLayout(orientation='vertical')
-        end_button = Button(text="End", on_press=self.end_game)
-        self.layout.add_widget(end_button)
+        self.player_label = Label(text="", font_size=20)
+        self.attack_buttons = BoxLayout(orientation='horizontal')
+
+        for level in self.attack_levels:
+            button = Button(text=f"Attack {level}", on_press=self.attack)
+            self.attack_buttons.add_widget(button)
+
+        self.layout.add_widget(self.player_label)
+        self.layout.add_widget(self.attack_buttons)
 
         self.add_widget(self.layout)
 
-    def end_game(self, instance):
-        # Change the screen to result
-        self.manager.current = "result"
-
-
+    def set_players(self, player1, player2):
+        pass
+    def update_player_label(self):
+        pass
+    def attack(self, instance):
+        pass
+    
 class ResultScreen(Screen):
     def __init__(self, **kwargs):
         super(ResultScreen, self).__init__(**kwargs)
