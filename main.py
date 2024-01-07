@@ -182,7 +182,12 @@ class GameScreen(Screen):
         self.player_label.text = f"{self.current_player.name}'s Turn\nHealth: {self.current_player.hp}"
         
     def attack(self, instance):
-        pass
+        if self.current_player == self.player1:
+            target = self.player2
+        else:
+            target = self.player1
+
+        self.current_player.attack(target, int(instance.text.split()[-1]))
     
 class ResultScreen(Screen):
     def __init__(self, **kwargs):
