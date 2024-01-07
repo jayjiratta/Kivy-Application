@@ -188,7 +188,10 @@ class GameScreen(Screen):
             target = self.player1
 
         self.current_player.attack(target, int(instance.text.split()[-1]))
-    
+
+        self.current_player = self.player2 if self.current_player == self.player1 else self.player1
+        self.update_player_label()
+        
 class ResultScreen(Screen):
     def __init__(self, **kwargs):
         super(ResultScreen, self).__init__(**kwargs)
