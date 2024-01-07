@@ -189,8 +189,14 @@ class GameScreen(Screen):
 
         self.current_player.attack(target, int(instance.text.split()[-1]))
 
-        self.current_player = self.player2 if self.current_player == self.player1 else self.player1
-        self.update_player_label()
+        if self.player1.hp <= 0 or self.player2.hp <= 0:
+            winner = self.player2 if self.player1.hp <= 0 else self.player1
+            self.manager.get_screen("result").update_winner(winner.name)
+            self.manager.current = "result"
+        else:
+            # Switch to the other player's turn
+            self.current_player = self.player2 if self.current_player == self.player1 else self.player1
+            self.update_player_label()
         
 class ResultScreen(Screen):
     def __init__(self, **kwargs):
