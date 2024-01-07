@@ -202,10 +202,12 @@ class ResultScreen(Screen):
     def __init__(self, **kwargs):
         super(ResultScreen, self).__init__(**kwargs)
         self.layout = BoxLayout(orientation='vertical')
-        intro_label = Label(text="real end")
-        self.layout.add_widget(intro_label)
-
+        self.winner_label = Label(text='', font_size=20)
+        self.layout.add_widget(self.winner_label)
         self.add_widget(self.layout)
+
+    def update_winner(self, winner_name):
+        self.winner_label.text = f"The winner is {winner_name}"
 
 class MainApp(App):
     def build(self):
