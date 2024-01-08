@@ -116,22 +116,24 @@ class CharacterSelectionScreen(Screen):
     def __init__(self, **kwargs):
         super(CharacterSelectionScreen, self).__init__(**kwargs)
         self.layout1 = BoxLayout(orientation='vertical')
-        # self.layout2 = BoxLayout(orientation='horizontal')
         self.selected_char_label = Label(text="Select Your Character", font_size=20)
-
         char_select = Label(text="CharacterSelectionScreen")
         self.layout1.add_widget(char_select)
-
+        char_detail_layout = BoxLayout(orientation='horizontal')
+        
         for char_name in ['Karina', 'Winter', 'Giselle', 'Ningning']:
+            player_image = Image(source=f"./image/{char_name}.jpg")
             char_button = Button(text=char_name, on_press=lambda x, char_name=char_name: self.select_character(char_name))
-            self.layout1.add_widget(char_button)
+            player_layout = BoxLayout(orientation='vertical')
+            player_layout.add_widget(player_image)
+            player_layout.add_widget(char_button)
+            char_detail_layout.add_widget(player_layout)
 
+        self.layout1.add_widget(char_detail_layout)
         start_button = Button(text="Start Game", on_press=self.start_game)
         self.layout1.add_widget(self.selected_char_label)
         self.layout1.add_widget(start_button)
-
         self.add_widget(self.layout1)
-
         self.player1_char = None
         self.player2_char = None
 
@@ -142,19 +144,13 @@ class CharacterSelectionScreen(Screen):
         elif self.player2_char is None:
             self.player2_char = Char(char_name, 'Type', 100, 100)
             self.selected_char_label.text = f"Player 2 selected: {char_name}"
-
+    
     def start_game(self, instance):
         if self.player1_char is not None and self.player2_char is not None:
             self.manager.get_screen("game").set_players(self.player1_char, self.player2_char)
             self.manager.current = "game"
         else:
             self.selected_char_label.text = "Both players must select a character."
-
-    def display_attack_skills(self, character):
-        attack_skills = character.skill_with_damage_and_mana()
-        self.attack_skills_label.text = "Attack Skills:\n"
-        for skill, damage, mana in attack_skills:
-            self.attack_skills_label.text += f"{skill} - Damage: {damage}, Mana: {mana}\n"
 
 class GameScreen(Screen):
     def __init__(self, **kwargs):
