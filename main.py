@@ -150,6 +150,12 @@ class CharacterSelectionScreen(Screen):
         else:
             self.selected_char_label.text = "Both players must select a character."
 
+    def display_attack_skills(self, character):
+        attack_skills = character.skill_with_damage_and_mana()
+        self.attack_skills_label.text = "Attack Skills:\n"
+        for skill, damage, mana in attack_skills:
+            self.attack_skills_label.text += f"{skill} - Damage: {damage}, Mana: {mana}\n"
+
 class GameScreen(Screen):
     def __init__(self, **kwargs):
         super(GameScreen, self).__init__(**kwargs)
@@ -194,7 +200,6 @@ class GameScreen(Screen):
             self.manager.get_screen("result").update_winner(winner.name)
             self.manager.current = "result"
         else:
-            # Switch to the other player's turn
             self.current_player = self.player2 if self.current_player == self.player1 else self.player1
             self.update_player_label()
         
