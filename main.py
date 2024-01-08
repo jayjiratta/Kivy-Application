@@ -124,8 +124,10 @@ class CharacterSelectionScreen(Screen):
         for char_name in ['Karina', 'Winter', 'Giselle', 'Ningning']:
             player_image = Image(source=f"./image/{char_name}.jpg")
             char_button = Button(text=char_name, on_press=lambda x, char_name=char_name: self.select_character(char_name))
+            skill = Label(text = self.display_attack_skills(char_name))
             player_layout = BoxLayout(orientation='vertical')
             player_layout.add_widget(player_image)
+            player_layout.add_widget(skill)
             player_layout.add_widget(char_button)
             char_detail_layout.add_widget(player_layout)
 
@@ -144,7 +146,15 @@ class CharacterSelectionScreen(Screen):
         elif self.player2_char is None:
             self.player2_char = Char(char_name, 'Type', 100, 100)
             self.selected_char_label.text = f"Player 2 selected: {char_name}"
-    
+
+    def display_attack_skills(self, character):
+        char_instance = Char(character, 'Type', 100, 100) 
+        attack_skills = char_instance.skill_with_damage_and_mana()
+        skills_text = "Attack Skills:\n"
+        for skill, damage, mana in attack_skills:
+            skills_text += f"{skill} - Damage: {damage}, Mana: {mana}\n"
+        return skills_text
+
     def start_game(self, instance):
         if self.player1_char is not None and self.player2_char is not None:
             self.manager.get_screen("game").set_players(self.player1_char, self.player2_char)
