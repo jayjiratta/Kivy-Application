@@ -116,14 +116,14 @@ class CharacterSelectionScreen(Screen):
     def __init__(self, **kwargs):
         super(CharacterSelectionScreen, self).__init__(**kwargs)
         self.layout1 = BoxLayout(orientation='vertical')
-        self.selected_char_label = Label(text="Select Your Character", font_size=20)
-        char_select = Label(text="CharacterSelectionScreen")
+        self.selected_char_label = Label(text="Select Your Character", size_hint=(None, None), size=(200, 100),pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        char_select = Label(text="CharacterSelectionScreen", size_hint=(None, None), size=(200, 100),pos_hint={'center_x': 0.5, 'center_y': 0.5})
         self.layout1.add_widget(char_select)
         char_detail_layout = BoxLayout(orientation='horizontal')
         
         for char_name in ['Karina', 'Winter', 'Giselle', 'Ningning']:
             player_image = Image(source=f"./image/{char_name}.jpg")
-            char_button = Button(text=char_name, on_press=lambda x, char_name=char_name: self.select_character(char_name))
+            char_button = Button(text=char_name, on_press=lambda x, char_name=char_name: self.select_character(char_name),size_hint=(1, 0.25))
             skill = Label(text = self.display_attack_skills(char_name))
             player_layout = BoxLayout(orientation='vertical')
             player_layout.add_widget(player_image)
@@ -132,7 +132,7 @@ class CharacterSelectionScreen(Screen):
             char_detail_layout.add_widget(player_layout)
 
         self.layout1.add_widget(char_detail_layout)
-        start_button = Button(text="Start Game", on_press=self.start_game)
+        start_button = Button(text="Start Game", on_press=self.start_game,size_hint=(1, 0.25))
         self.layout1.add_widget(self.selected_char_label)
         self.layout1.add_widget(start_button)
         self.add_widget(self.layout1)
