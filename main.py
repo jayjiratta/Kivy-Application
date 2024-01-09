@@ -173,13 +173,15 @@ class GameScreen(Screen):
 
         self.layout = BoxLayout(orientation='vertical')
         self.player_label = Label(text="", font_size=20)
+        self.player_skill_use = Label(text="", font_size=20)
         self.attack_buttons = BoxLayout(orientation='horizontal')
 
         for level in self.attack_levels:
-            button = Button(text=f"Attack {level}", on_press=self.attack)
+            button = Button(text=f"Attack {level}", on_press=self.attack,size_hint=(1, 0.75))
             self.attack_buttons.add_widget(button)
 
         self.layout.add_widget(self.player_label)
+        self.layout.add_widget(self.player_skill_use)
         self.layout.add_widget(self.attack_buttons)
 
         self.add_widget(self.layout)
@@ -192,6 +194,12 @@ class GameScreen(Screen):
 
     def update_player_label(self):
         self.player_label.text = f"{self.current_player.name}'s Turn\nHealth: {self.current_player.hp}"
+    
+    def skill_use(self):
+        skills = self.current_player.skill_with_damage_and_mana()
+        self.player_skill_use.text = "Attack Skills:\n"
+        for skill, damage, mana in skills:
+            self.player_skill_use.text += f"{skill} - Damage: {damage}, Mana: {mana}\n"
         
     def attack(self, instance):
         if self.current_player == self.player1:
@@ -208,6 +216,7 @@ class GameScreen(Screen):
         else:
             self.current_player = self.player2 if self.current_player == self.player1 else self.player1
             self.update_player_label()
+            self.skill_use()
         
 class ResultScreen(Screen):
     def __init__(self, **kwargs):
