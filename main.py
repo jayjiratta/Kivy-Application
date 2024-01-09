@@ -193,7 +193,8 @@ class GameScreen(Screen):
         self.update_player_label()
 
     def update_player_label(self):
-        self.player_label.text = f"{self.current_player.name}'s Turn\nHealth: {self.current_player.hp}"
+        enemy = self.player2 if self.current_player == self.player1 else self.player1
+        self.player_label.text = f"{self.current_player.name}'s Turn\nHealth: {self.current_player.hp}\nEnemy: {enemy.name}'s Health: {enemy.hp}"
     
     def skill_use(self):
         skills = self.current_player.skill_with_damage_and_mana()
