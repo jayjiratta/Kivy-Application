@@ -120,7 +120,9 @@ class CharacterSelectionScreen(Screen):
         char_select = Label(text="CharacterSelectionScreen", size_hint=(None, None), size=(200, 100),pos_hint={'center_x': 0.5, 'center_y': 0.5})
         self.layout1.add_widget(char_select)
         char_detail_layout = BoxLayout(orientation='horizontal')
-        
+
+        self.selected_characters = set()  # เก็บชื่อตัวละครที่ถูกเลือกไว้
+
         for char_name in ['Karina', 'Winter', 'Giselle', 'Ningning']:
             player_image = Image(source=f"./image/{char_name}.jpg")
             char_button = Button(text=char_name, on_press=lambda x, char_name=char_name: self.select_character(char_name),size_hint=(1, 0.25))
@@ -140,12 +142,15 @@ class CharacterSelectionScreen(Screen):
         self.player2_char = None
 
     def select_character(self, char_name):
-        if self.player1_char is None:
-            self.player1_char = Char(char_name, 'Type', 100, 100)
-            self.selected_char_label.text = f"Player 1 selected: {char_name}"
-        elif self.player2_char is None:
-            self.player2_char = Char(char_name, 'Type', 100, 100)
-            self.selected_char_label.text = f"Player 2 selected: {char_name}"
+        if char_name not in self.selected_characters:
+            if self.player1_char is None:
+                self.player1_char = Char(char_name, 'Type', 100, 100)
+                self.selected_characters.add(char_name)
+                self.selected_char_label.text = f"Player 1 selected: {char_name}"
+            elif self.player2_char is None:
+                self.player2_char = Char(char_name, 'Type', 100, 100)
+                self.selected_characters.add(char_name)
+                self.selected_char_label.text = f"Player 2 selected: {char_name}"
 
     def display_attack_skills(self, character):
         char_instance = Char(character, 'Type', 100, 100) 
@@ -248,7 +253,7 @@ class GameScreen(Screen):
         if self.player1.hp <= 0 or self.player2.hp <= 0:
             winner = self.player2 if self.player1.hp <= 0 else self.player1
             winner_name = "Player 2" if self.player1.hp <= 0 else "Player 1"
-            self.manager.get_screen("result").update_winner(winner_name + f" {winner.name}")
+            self.manager.get_screen("result").update_winner(winner.name)
             self.manager.current = "result"
         else:
             self.current_player = self.player2 if self.current_player == self.player1 else self.player1
@@ -260,11 +265,15 @@ class ResultScreen(Screen):
         super(ResultScreen, self).__init__(**kwargs)
         self.layout = BoxLayout(orientation='vertical')
         self.winner_label = Label(text='', font_size=20)
+        self.winner_image = Image(source='', size=(100, 100))
         self.layout.add_widget(self.winner_label)
+        self.layout.add_widget(self.winner_image)
         self.add_widget(self.layout)
 
     def update_winner(self, winner_name):
         self.winner_label.text = f"The winner is {winner_name}"
+        self.winner_image.source = f'./image/{winner_name}.jpg'
+
 
 class MainApp(App):
     def build(self):
