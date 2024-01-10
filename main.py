@@ -247,7 +247,8 @@ class GameScreen(Screen):
 
         if self.player1.hp <= 0 or self.player2.hp <= 0:
             winner = self.player2 if self.player1.hp <= 0 else self.player1
-            self.manager.get_screen("result").update_winner(winner.name)
+            winner_name = "Player 2" if self.player1.hp <= 0 else "Player 1"
+            self.manager.get_screen("result").update_winner(winner_name + f" {winner.name}")
             self.manager.current = "result"
         else:
             self.current_player = self.player2 if self.current_player == self.player1 else self.player1
