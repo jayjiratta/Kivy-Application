@@ -38,7 +38,7 @@ class Char:
 
         for skill, damage, mana in characters[self.name]:
             print(f"{skill} damage {damage} mana {mana}")
-        
+
         return characters[self.name]
 
     def attack(self, target, skill_number):
@@ -167,42 +167,65 @@ class GameScreen(Screen):
         super(GameScreen, self).__init__(**kwargs)
         self.player1 = None
         self.player2 = None
-
         self.attack_levels = [1, 2, 3]
         self.current_player = None
 
         self.layout = BoxLayout(orientation='vertical')
-        self.player_label = Label(text="", font_size=20)
-        self.player_skill_use = Label(text="", font_size=20)
-        self.attack_buttons = BoxLayout(orientation='horizontal')
+        player_info_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.2))
+
+        self.player1_name_label = Label(text="", font_size=18, halign='center', valign='middle')
+        self.player2_name_label = Label(text="", font_size=18, halign='center', valign='middle')
+        player_info_layout.add_widget(self.player1_name_label)
+        player_info_layout.add_widget(self.player2_name_label)
+        self.layout.add_widget(player_info_layout)
+
+        player_images_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.4))
+        self.player1_image = Image(source="", size_hint=(0.5, 1))
+        self.player2_image = Image(source="", size_hint=(0.5, 1))
+        player_images_layout.add_widget(self.player1_image)
+        player_images_layout.add_widget(self.player2_image)
+        self.layout.add_widget(player_images_layout)
+
+        skills_and_attack_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.4))
+        self.player1_skills_label = Label(text="", font_size=16)
+        self.player2_skills_label = Label(text="", font_size=16)
+        skills_and_attack_layout.add_widget(self.player1_skills_label)
+        skills_and_attack_layout.add_widget(self.player2_skills_label)
+        attack_buttons_layout = BoxLayout(orientation='vertical', size_hint=(0.2, 1))
 
         for level in self.attack_levels:
-            button = Button(text=f"Attack {level}", on_press=self.attack,size_hint=(1, 0.75))
-            self.attack_buttons.add_widget(button)
+            button = Button(text=f"Attack {level}", on_press=self.attack, size_hint_y=None, height=50,background_color=(0.2, 0.7, 0.3, 1),color=(1, 1, 1, 1))  
+            attack_buttons_layout.add_widget(button)
 
-        self.layout.add_widget(self.player_label)
-        self.layout.add_widget(self.player_skill_use)
-        self.layout.add_widget(self.attack_buttons)
-
+        skills_and_attack_layout.add_widget(attack_buttons_layout)
+        self.layout.add_widget(skills_and_attack_layout)
         self.add_widget(self.layout)
 
     def set_players(self, player1, player2):
         self.player1 = player1
         self.player2 = player2
         self.current_player = random.choice([player1, player2])
-        self.update_player_label()
+        self.update_player_info()
         self.skill_use()
 
-    def update_player_label(self):
-        enemy = self.player2 if self.current_player == self.player1 else self.player1
-        self.player_label.text = f"{self.current_player.name}'s Turn\nHealth: {self.current_player.hp}\nMana:{self.current_player.mana} \n\nEnemy: {enemy.name}'s Health: {enemy.hp}"
-    
+    def update_player_info(self):
+        self.player1_name_label.text = f"{self.player1.name}\nHealth: {self.player1.hp}\nMana: {self.player1.mana}"
+        self.player2_name_label.text = f"{self.player2.name}\nHealth: {self.player2.hp}\nMana: {self.player2.mana}"
+        self.player1_image.source = f"./image/{self.player1.name}.jpg"
+        self.player2_image.source = f"./image/{self.player2.name}.jpg"
+
     def skill_use(self):
         skills = self.current_player.skill_with_damage_and_mana()
-        self.player_skill_use.text = "Attack Skills:\n"
+        skills_text = "Attack Skills:\n"
         for skill, damage, mana in skills:
-            self.player_skill_use.text += f"{skill} - Damage: {damage}, Mana: {mana}\n"
-        
+            skills_text += f"{skill} - Damage: {damage}, Mana: {mana}\n"
+        if self.current_player == self.player1:
+            self.player1_skills_label.text = skills_text
+            self.player2_skills_label.text = ""
+        else:
+            self.player1_skills_label.text = ""
+            self.player2_skills_label.text = skills_text
+
     def attack(self, instance):
         if self.current_player == self.player1:
             target = self.player2
@@ -222,14 +245,13 @@ class GameScreen(Screen):
 
         self.current_player.mana = min(self.current_player.mana, 100)
 
-        
         if self.player1.hp <= 0 or self.player2.hp <= 0:
             winner = self.player2 if self.player1.hp <= 0 else self.player1
             self.manager.get_screen("result").update_winner(winner.name)
             self.manager.current = "result"
         else:
             self.current_player = self.player2 if self.current_player == self.player1 else self.player1
-            self.update_player_label()
+            self.update_player_info()
             self.skill_use()
         
 class ResultScreen(Screen):
@@ -263,7 +285,3 @@ class MainApp(App):
 
 if __name__ == '__main__':
     MainApp().run()
-
-
-
-
