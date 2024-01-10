@@ -186,25 +186,16 @@ class GameScreen(Screen):
 
         self.add_widget(self.layout)
 
-        self.turn_count = 0  
-        self.skill3_count = 0  
-        self.max_turns_for_skill3 = 2  
-
-        self.mana_increase_per_skill = {
-            1: 10,
-            2: 7,
-            3: 5
-        }
-
     def set_players(self, player1, player2):
         self.player1 = player1
         self.player2 = player2
         self.current_player = random.choice([player1, player2])
         self.update_player_label()
+        self.skill_use()
 
     def update_player_label(self):
         enemy = self.player2 if self.current_player == self.player1 else self.player1
-        self.player_label.text = f"{self.current_player.name}'s Turn\nHealth: {self.current_player.hp}\nEnemy: {enemy.name}'s Health: {enemy.hp}"
+        self.player_label.text = f"{self.current_player.name}'s Turn\nHealth: {self.current_player.hp}\nMana:{self.current_player.mana} \n\nEnemy: {enemy.name}'s Health: {enemy.hp}"
     
     def skill_use(self):
         skills = self.current_player.skill_with_damage_and_mana()
