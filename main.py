@@ -209,8 +209,20 @@ class GameScreen(Screen):
         else:
             target = self.player1
 
-        self.current_player.attack(target, int(instance.text.split()[-1]))
+        skill_number = int(instance.text.split()[-1])
 
+        self.current_player.attack(target, skill_number)
+
+        if skill_number == 1:
+            self.current_player.mana += 10
+        elif skill_number == 2:
+            self.current_player.mana += 5
+        elif skill_number == 3:
+            self.current_player.mana += 3
+
+        self.current_player.mana = min(self.current_player.mana, 100)
+
+        
         if self.player1.hp <= 0 or self.player2.hp <= 0:
             winner = self.player2 if self.player1.hp <= 0 else self.player1
             self.manager.get_screen("result").update_winner(winner.name)
