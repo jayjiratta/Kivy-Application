@@ -25,12 +25,6 @@ MYs world is a simple turn-based, two-player game where players choose a designa
   - Navigate to the directory containing the project files.
   - Run the main.py file:
 
-    ```bash
-    python main.py
-    ```
-
-  #### Operating System-specific Instructions:
-
   - **Windows:**
     ```bash
     # Command for running on Windows
