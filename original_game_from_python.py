@@ -175,7 +175,7 @@ while True:
             print("Description: Unleashes a rapid flurry of rocket-powered punches, striking multiple enemies in quick succession with immense strength.")
 
         elif tmi_char == 'Winter':
-            print("\nPlayer 2 - Armament:\n")
+            print("\nPlayer 2 - Armamenter:\n")
             print("Skill 1: Arsenal Overdrive")
             print("Description: Activates an enhanced combat mode, increasing attack speed and damage output for a short duration.")
             print("Skill 2: Shield Matrix")
